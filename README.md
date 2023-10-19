@@ -215,3 +215,10 @@
 ```
 
 # image
+<div align="center"> 
+  <img alt="1" src="https://github.com/greeneryjin/PlantApp/assets/87289562/b1016d15-ae77-4751-8c3c-d7b97e3f152d" width = 20%>
+  <img alt="22" src="https://github.com/greeneryjin/PlantApp/assets/87289562/ef2b9d17-e838-48c3-bb77-706e024c01e1" width = 20%>
+  <img alt="캡처" src="https://github.com/greeneryjin/PlantApp/assets/87289562/7c91fb80-cef9-4aab-83d4-e1e57152470c" width = 20%>
+  <img alt="333" src="https://github.com/greeneryjin/PlantApp/assets/87289562/42c32ba0-0065-494d-b1ff-3d67f5923752" width = 20%>
+</div>
+
