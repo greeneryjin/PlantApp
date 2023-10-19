@@ -8,13 +8,10 @@
 [2. 트러블 슈팅](#troubleshooting) 
 
 
-[3. 리팩토링](#refactoring)
+[3. 사용한 개발 도구 및 라이브러리](#tool)
 
 
-[4. 사용한 개발 도구 및 라이브러리](#tool)
-
-
-[5. 완성된 App 이미지](#image)
+[4. 완성된 App 이미지](#image)
 
 
 # important
@@ -121,7 +118,7 @@
 
 # troubleshooting
 #### 1. 사진 업로드 깨짐 현상
-   여러 개의 사진을 S3에 업로드할 때마다 두 번째 사진부터 파일이 깨져서 올라갔습니다.
+  여러 개의 사진을 S3에 업로드할 때마다 두 번째 사진부터 파일이 깨져서 올라갔습니다. 원인을 찾아보니 ObjectMetadata에서 setContentType()메서드에서 기존 파일의 값이 덮어쓰기 됩니다.
 
   ##### 에러 코드
   ```java
@@ -130,8 +127,6 @@
   omd.setContentLength(file.getSize());
   omd.setHeader("filename", file.getOriginalFilename());
   ```
-  ##### 원인 
-  : ObjectMetadata에서 setContentType()메서드에서 기존 파일의 값이 덮어쓰기 됩니다.
   
   ##### 수정된 코드
   ```JAVA
@@ -148,7 +143,7 @@
 
    
 #### 2. 언더스코어 에러
-   엔티티에 언더스코어를 사용하니 에러가 발생했습니다.
+  엔티티에 언더스코어를 사용하니 에러가 발생했습니다.
    
   ##### 에러 코드
   ```java
@@ -176,13 +171,23 @@
    해결 
    Account 타입의 닉네임 프로퍼티를 찾을 수 없다고 말해주었습니다. 에러를 찾아보니 Spring-Data-JPA에서는 언더스코어(_)가 프로퍼티을 찾기 위한 탐색 경로를 지정하는 예약어입니다.
 
-3. CORS 문제
 
+3. objectMapper 에러
+   리액트 네이티브에서 로그인을 위해 유저정보를 json을 넘기던 중, No content to map due to end-of-input 발생했습니다. 원인을 찾아보니 objectMapper에서 발생한 에러였습니다.
 
-5. objectMapper 에러 
+   ##### 에러 코드
+   ```java
+   //accountDto json -> 객체로 변환.
+   AccountDto accountDto = objectMapper.readValue(request.getReader(), AccountDto.class);
+   ```
 
-
-# refactoring
+   ##### 수정된 코드
+   ```JAVA
+   ServletInputStream inputStream = request.getInputStream();
+   String messageBody = StreamUtils.copyToString(inputStream, StandardCharsets.UTF_8);
+   LoginDto loginDto = objectMapper.readValue(messageBody, LoginDto.class);
+   ```
+   json으로 넘어온 정보들을 읽을 때 발생한 문제였습니다. 그래서 StreamUtils 유틸 클래스의 copyToString()를 사용해서 InputStream/Output Stream으로 String으로 변환했습니다. 
 
 
 # tool
